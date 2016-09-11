@@ -1,9 +1,9 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
 # vim:fenc=utf-8
-#
-# Copyright © 2016.05.01 tlwlmy
-#
+# @author tlwlmy
+# @version 2016-09-11
+
 from app import create_app
 from app.common.functions import api_response
 from flask import url_for
