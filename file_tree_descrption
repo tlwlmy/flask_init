@@ -1,0 +1,27 @@
+flask_base─┬─README.md
+           ├─config.py    # flask配置
+           ├─manage.py    # flask运行脚本
+           ├─reload    # flask服务重启reload文件
+           ├─requirement.txt    # python虚拟环境模块
+           ├─docs─┬─flask.ini    # uwsgi服务配置启动文件
+           │      ├─install_guide.md    # 初始化按装指导
+           │      ├─nignx.conf    # flask服务nginx配置
+           │      └─supervisor.conf    # supervisor服务启动配置
+           ├─app─┐    # 应用目录
+           │     ├─__init__.py    # flask启动初始化文件
+           │     ├─auth─┐    # 用户模块
+           │     │      ├─__init__.py    # 让 Python 把该目录当成一个开发包 (即一组模块)所需的文件
+           │     │      ├─models.py    # 定义数据的存储格式，并且提供了数据库访问的API
+           │     │      └─view.py    # 定义那些数据被显示，是业务逻辑处理模块
+           │     ├─common─┐    # 公共配置
+           │     │        ├─__init__.py    # 让 Python 把该目录当成一个开发包 (即一组模块)所需的文件
+           │     │        ├─config_error.py    # 公共错误码配置
+           │     │        ├─constant.py    # 公共常量宏定义
+           │     │        └─functions.py    # 公共函数
+           │     └─module─┐    # 公共模块
+           │              ├─__init__.py    # 让 Python 把该目录当成一个开发包 (即一组模块)所需的文件
+           │              └─debug_helper.py    # debug排查脚本
+           │
+           ├─manage.py    # flask运行脚本
+           ├─reload    # flask服务重启reload文件
+           └─requirement.txt    # python虚拟环境模块
