@@ -32,9 +32,7 @@ def sub(l, start, end):
 
 @app.route('/')
 def index():
-    return api_response({
-        'flask_base': 'https://github.com/tlwlmy/flask_base',
-    })
+    return 'Hello World!'
 
 if __name__ == '__main__':
     # app.run()
