@@ -21,7 +21,6 @@ def parse_url_params(url_conf, params):
     # 解析参数
     effect = True
     final = {}
-    print url_conf
 
     for key, conf in url_conf.items():
         # 是否修改参数名
@@ -37,23 +36,20 @@ def parse_url_params(url_conf, params):
             if 'default' in conf.keys():
                 final[alias] = conf['default']
 
-        if alias in final.keys() and final[alias] is not None:
+        if alias in final.keys() and final[alias] is not None and conf['need'] == 1:
             # 检查参数类型
             if conf['type'] == 'i':
-                if isinstance(final[alias], int):
+                if final[alias].isdigit():
                     final[alias] = int(final[alias])
                 else:
                     effect = False
             elif conf['type'] == 't':
-                if isinstance(final[alias], int):
+                if final[alias].isdigit():
                     final[alias] = datetime.fromtimestamp(int(final[alias]))
                 else:
                     effect = False
             elif conf['type'] == 'D':
-                if final[alias].isdigit():
-                    final[alias] = Decimal(final[alias])
-                else:
-                    effect = False
+                final[alias] = Decimal(final[alias])
 
     return effect, final
 

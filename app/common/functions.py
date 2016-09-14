@@ -119,7 +119,7 @@ def get_signature(params, secret):
     sign_str += "%s=%s" % ("key", secret)
     return md5(sign_str).upper()
 
-def url_dict_params(need, ktype, default=None, alias=None):
+def url_dict_params(need, ktype, default='None', alias=None):
     """
     need: 参数是否必须 0表示不需要 1表示需要
     ktype: 参数类型 i表示整形 t表示时间戳 D表示Decimal
@@ -133,7 +133,7 @@ def url_dict_params(need, ktype, default=None, alias=None):
     }
 
     # 默认值
-    if default is not None:
+    if default != 'None':
         final['default'] = default
 
     # 别名
