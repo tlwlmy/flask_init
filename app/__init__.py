@@ -1,9 +1,9 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
 # vim:fenc=utf-8
-#
-# Copyright © 2016.05.01 tlwlmy
-#
+# @author tlwlmy
+# @version 2016-09-01
+
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.redis import FlaskRedis
