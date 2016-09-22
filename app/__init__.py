@@ -7,11 +7,13 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.redis import FlaskRedis
+from flask.ext.pymongo import PyMongo
 from flask.ext.cache import Cache
 from config import config, run_env
 from flask.ext.session import Session
 db = SQLAlchemy()
 redis_store = FlaskRedis()
+mongo = PyMongo()
 cache = Cache()
 sess = Session()
 
@@ -23,6 +25,7 @@ def create_app(config_name=None):
     config[config_name].init_app(app)
     db.init_app(app)
     redis_store.init_app(app)
+    mongo.init_app(app)
     cache.init_app(app, config=config[config_name].FLASK_CACHE_CONFIG)
     sess.init_app(app)
 
