@@ -4,6 +4,7 @@
 # @author tlwlmy
 # @version 2016-09-11
 
+import re
 from datetime import datetime
 from decimal import Decimal
 from functools import wraps
@@ -19,8 +20,7 @@ from .auth_config_params import auth_url_params
 
 def parse_url_params(url_conf, params):
     # 解析参数
-    effect = True
-    final = {}
+    effect, final = True, {}
 
     for key, conf in url_conf.items():
         # 是否修改参数名
@@ -49,7 +49,10 @@ def parse_url_params(url_conf, params):
                 else:
                     effect = False
             elif conf['type'] == 'D':
-                final[alias] = Decimal(final[alias])
+                if re.match('^\d+(\.\d+)?$', final[alias]):
+                    final[alias] = Decimal(final[alias])
+                else:
+                    effect = False
 
     return effect, final
 
