@@ -21,6 +21,9 @@ def index():
 def login(params):
     # 用户登录
 
+    params['name'] = params['input']['name']
+    params['password'] = params['input']['password']
+
     user_info = auth_db.query_user_by_name(params['name'], timeout=0)
 
     # 检查用户信息
@@ -39,6 +42,9 @@ def login(params):
 @validate_user
 def insert(params):
     # 用户登录
+
+    # 格式化参数
+    params['name'] = params['input']['name']
 
     # 检查用户信息
     user_info = auth_db.query_user_by_name(params['name'])

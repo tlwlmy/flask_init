@@ -108,6 +108,7 @@ def validate_user(func):
 
         # 格式参数
         if params:
+            params = {'input': params}
             kwargs['params'] = params
 
         return func(*args, **kwargs)
@@ -122,6 +123,7 @@ def validate_params(func):
         if effect == False:
             return api_response({'c': EC_GET_PARAMS_MISSING, 'msg': 'params_error'})
 
+        params = {'input': params}
         kwargs['params'] = params
 
         return func(*args, **kwargs)
