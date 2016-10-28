@@ -76,3 +76,31 @@ def cached(prefix=None, rtype='list', dict_keys=[], timeout=Duration.HalfHour, f
             return final
         return _wrapper_fun
     return wrapper_fun
+
+def allow_cross_domain(fun):
+    # 允许跨域
+    @wraps(fun)
+    def wrapper_fun(*args, **kwargs):
+        rst = make_response(fun(*args, **kwargs))
+        rst.headers['Access-Control-Allow-Origin'] = '*'
+        rst.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+        allow_headers = "Referer,Accept,Origin,User-Agent"
+        rst.headers['Access-Control-Allow-Headers'] = allow_headers
+        return rst
+    return wrapper_fun
+
+def allow_cookie_domain(func):
+    # 允许写cookie
+    @wraps(func)
+    def wrapper_fun(*args, **kwargs):
+        rst = make_response(func(*args, **kwargs))
+        http_origin = request.headers['Origin'] if 'Origin' in request.headers.keys() else '*'
+        rst.headers['Content-type'] = 'application/json; charset=UTF-8'
+        # rst.headers['Access-Control-Allow-Origin", "*")
+        rst.headers['Access-Control-Allow-Origin'] = http_origin
+        rst.headers['Access-Control-Allow-Credentials'] = 'true'
+        rst.headers['Access-Control-Allow-Methods'] = '*'
+        rst.headers['Access-Control-Allow-Headers'] = 'Content-Type,Accept,Authorization'
+        rst.headers['Access-Control-Max-Age'] = '86400'
+        return rst
+    return wrapper_fun

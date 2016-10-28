@@ -4,14 +4,14 @@
 # @author tlwlmy
 # @version 2016-09-11
 
-import re
+import re, urllib
 from datetime import datetime
 from decimal import Decimal
 from functools import wraps
 from flask import request, session, redirect, url_for, make_response
 from app.common.config_error import EC_LOGIN_USER_UNAUTH, EC_GET_PARAMS_MISSING
 from app.common.constant import RECEIVE_WELFARE_URL, Duration
-from app.common.functions import api_response
+from app.common.functions import api_response, get_remote_ip
 from .wechat_config_params import wechat_url_params
 from .application_config_params import application_url_params
 from .user_config_params import user_url_params
@@ -92,6 +92,22 @@ def get_params(module, func_name, method):
 
     return parse_url_params(config_params, data)
 
+def format_init_params(func):
+    # 格式化初始参数
+    @wraps(func)
+    def wrapper_fun(*args, **kwargs):
+        params = kwargs['params'] if 'params' in kwargs.keys() else {}
+
+        # 获取请求基本信息
+        params['ip'] = get_remote_ip()
+        params['ipr'] = request.remote_addr
+        params['ua'] = urllib.quote(request.headers['User-Agent']),
+
+        kwargs['params'] = params
+
+        return func(*args, **kwargs)
+    return wrapper_fun
+
 def validate_user(func):
     # 验证用户信息
     @wraps(func)
@@ -108,8 +124,9 @@ def validate_user(func):
 
         # 格式参数
         if params:
-            params = {'input': params}
-            kwargs['params'] = params
+            if 'params' not in kwargs.keys():
+                kwargs['params'] = {}
+            kwargs['params']['input'] = params
 
         return func(*args, **kwargs)
     return wrapper_fun
@@ -117,30 +134,17 @@ def validate_user(func):
 def validate_params(func):
     # 验证参数
     @wraps(func)
+    @format_init_params
     def wrapper_fun(*args, **kwargs):
         # 解析url参数
         effect, params = get_params(func.__module__, func.func_name, request.method)
         if effect == False:
             return api_response({'c': EC_GET_PARAMS_MISSING, 'msg': 'params_error'})
 
-        params = {'input': params}
-        kwargs['params'] = params
+        # 格式参数
+        if 'params' not in kwargs.keys():
+            kwargs['params'] = {}
+        kwargs['params']['input'] = params
 
         return func(*args, **kwargs)
-    return wrapper_fun
-
-def allow_cross_domain(func):
-    # 允许写cookie
-    @wraps(func)
-    def wrapper_fun(*args, **kwargs):
-        rst = make_response(func(*args, **kwargs))
-        http_origin = request.headers['Origin'] if 'Origin' in request.headers.keys() else '*'
-        rst.headers['Content-type'] = 'application/json; charset=UTF-8'
-        # rst.headers['Access-Control-Allow-Origin", "*")
-        rst.headers['Access-Control-Allow-Origin'] = http_origin
-        rst.headers['Access-Control-Allow-Credentials'] = 'true'
-        rst.headers['Access-Control-Allow-Methods'] = '*'
-        rst.headers['Access-Control-Allow-Headers'] = 'Content-Type,Accept,Authorization'
-        rst.headers['Access-Control-Max-Age'] = '86400'
-        return rst
     return wrapper_fun

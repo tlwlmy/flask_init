@@ -6,10 +6,10 @@
 
 from flask import request, make_response, render_template, jsonify
 from app.error import error
-from app.config_params.functions import allow_cross_domain
+from app.common.decorator import allow_cookie_domain
 
 @error.app_errorhandler(400)
-@allow_cross_domain
+@allow_cookie_domain
 def bad_request(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:
@@ -28,7 +28,7 @@ def bad_request(error):
 
 
 @error.app_errorhandler(401)
-@allow_cross_domain
+@allow_cookie_domain
 def unauthorized(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:
@@ -48,7 +48,7 @@ def unauthorized(error):
 
 
 @error.app_errorhandler(403)
-@allow_cross_domain
+@allow_cookie_domain
 def forbidden(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:
@@ -70,7 +70,7 @@ def forbidden(error):
 
 
 @error.app_errorhandler(404)
-@allow_cross_domain
+@allow_cookie_domain
 def not_found(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:
@@ -90,7 +90,7 @@ def not_found(error):
 
 
 @error.app_errorhandler(500)
-@allow_cross_domain
+@allow_cookie_domain
 def internal_server_error(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:
@@ -102,7 +102,7 @@ def internal_server_error(error):
 
 
 @error.app_errorhandler(501)
-@allow_cross_domain
+@allow_cookie_domain
 def not_implemented(error):
     if request.accept_mimetypes.accept_json and \
             not request.accept_mimetypes.accept_html:

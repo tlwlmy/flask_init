@@ -7,7 +7,7 @@
 
 import json, random, string, hashlib
 from decimal import Decimal
-from flask import jsonify, make_response
+from flask import jsonify, make_response, request
 from datetime import date, datetime
 from functools import wraps
 
@@ -142,3 +142,10 @@ def url_dict_params(need, ktype, default='None', alias=None):
 
     return final
 
+def get_remote_ip():
+    # 获取ip地址
+    if 'X-Real-Ip' in request.headers.keys():
+        return request.headers['X-Real-Ip']
+    elif 'X-Forwarded-For' in request.headers.keys():
+        return request.headers.getlist('X-Forwarded-For')[0]
+    return request.remote_addr
