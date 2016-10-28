@@ -8,7 +8,7 @@ from flask import session
 from app.auth import auth
 from app import cache
 from app.auth.auth_db import auth_db
-from app.config_params.functions import validate_user, validate_params
+from app.config_params.functions import validate_admin_user, validate_params
 from app.common.functions import api_response, md5
 from app.common.config_error import *
 
@@ -39,7 +39,7 @@ def login(params):
     return api_response({'c': 0})
 
 @auth.route('/insert', methods=['POST'])
-@validate_user
+@validate_admin_user
 def insert(params):
     # 用户登录
 

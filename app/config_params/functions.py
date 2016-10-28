@@ -108,7 +108,7 @@ def format_init_params(func):
         return func(*args, **kwargs)
     return wrapper_fun
 
-def validate_user(func):
+def validate_admin_user(func):
     # 验证用户信息
     @wraps(func)
     def wrapper_fun(*args, **kwargs):
