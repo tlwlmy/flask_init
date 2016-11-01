@@ -39,12 +39,12 @@ def parse_url_params(url_conf, params):
         if alias in final.keys() and final[alias] is not None and conf['need'] == 1:
             # 检查参数类型
             if conf['type'] == 'i':
-                if final[alias].isdigit():
+                if isinstance(final[alias], int) or final[alias].isdigit():
                     final[alias] = int(final[alias])
                 else:
                     effect = False
             elif conf['type'] == 't':
-                if final[alias].isdigit():
+                if isinstance(final[alias], int) or final[alias].isdigit():
                     final[alias] = datetime.fromtimestamp(int(final[alias]))
                 else:
                     effect = False

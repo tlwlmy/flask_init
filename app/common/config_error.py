@@ -1,14 +1,15 @@
-#!/usr/bin/env python
-#-*- coding: utf-8 -*-
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# @author tlwlmy
-# @version 2016-09-11
+#
+# Copyright © 2016.05.01 tlwlmy
+#
 
 # api 校验错误
-PARAMETER_INCOMPLETE = 401   # 参数不完整
-PARAMETER_ILLEGAL = 402      # 参数非法
-PARAMETER_AUTH_FAILED = 403  # 签名校验失败
-FORM_AUTH_FAILED = 400       # 参数数据校验失败
+PARAMETER_INCOMPLETE  = 401    # 参数不完整
+PARAMETER_ILLEGAL     = 402    # 参数非法
+PARAMETER_AUTH_FAILED = 403    # 签名校验失败
+FORM_AUTH_FAILED      = 400    # 参数数据校验失败
 
 # 服务器内部相关错误
 INTERNAL_DB_ERROR = 500  # 数据库保存错误，或者其他相关数据库错误
@@ -27,6 +28,10 @@ EC_MOBILE_FORMAT_ILLEGAL   = -1104    # 手机格式错误
 EC_IP_NOT_IN_WHITE_LISTS   = -1105    # ip不在白名单中
 EC_VALIDATE_KEY_ERROR      = -1106    # 验证码错误
 EC_SINGLE_DEVICE_TOO_MUCH  = -1107    # 单个参数出现太多
+EC_PAY_TYPE_FAILED         = -1108    # 效果类型错误
+EC_PARAMS_MISSING          = -1109    # 参数错误
+EC_RECORD_NOT_EXIST        = -1110    # 记录不存在
+EC_RECORD_EXISTED          = -1111    # 记录已存在
 
 
 # 用户错误码
@@ -61,11 +66,22 @@ EC_USER_WECHAT_UNSUBSCRIBE     = -2028    # 用户未关注公众号
 EC_USER_WX_PAY_FAIL            = -2029    # 用户支付失败
 EC_USER_PAY_TASK_COMPLETED     = -2030    # 用户支付任务已完成
 EC_USER_VALIDATE_FAIL          = -2031    # 用户验证失败
+EC_REWARD_SHARE_DONE           = -2032    # 抽奖当天已分享
+EC_REWARD_RAFFLE_ERROR         = -2033    # 抽奖次数不足
+EC_COMMIT_TASK_UPLOAD_ERROR    = -2034    # 提审上传错误
+EC_TASK_NOT_PRECDT             = -2035    # 任务无前提条件
+EC_COMMIT_TASK_DISSATISFY      = -2036    # 提审条件不满足
+EC_LIMIT_TASK_CLICKED          = -2037    # 任务已抢到
 
 
 # 微信
 EC_USER_WECHAT_AUTH_ERROR       = -2501    # 用户授权错误
 EC_APP_WECHAT_CREATE_MENU_ERROR = -2502    # 创建菜单失败
+
+# 广告
+EC_AD_NOT_BUGDET                = -2701    # 广告没有预算
+EC_AD_NOT_EFFECT                = -2702    # 广告无效
+
 
 
 # 公众号错误码
