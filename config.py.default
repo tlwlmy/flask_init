@@ -22,7 +22,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    LOG_PATH = "/home/ymserver/log/flask_base/devlopment-default.log" # 默认日志路径
+    LOG_PATH = "/home/ymserver/log/flask_init/devlopment-default.log" # 默认日志路径
     ALLOW_IP = ['127.0.0.1']
 
     # session
@@ -50,18 +50,20 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    LOG_PATH = "/home/ymserver/log/flask_base/testing-default.log" # 默认日志路径
+    LOG_PATH = "/home/ymserver/log/flask_init/testing-default.log" # 默认日志路径
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://tlwlmy:pass@127.0.0.1:3306/test?charset=utf8'
 
 class ProductionConfig(Config):
-    HOST = '0.0.0.0'
-    PORT = 5001
-    ROOT_PATH = '/home/ymserver/vhost/gateway/flask_base'
-    LOG_PATH = "/home/ymserver/log/flask_base/production-default.log" # 默认日志路径
+    ROOT_PATH = '/home/ymserver/vhost/gateway/flask_init'
+    LOG_PATH = "/home/ymserver/log/flask_init/production-default.log" # 默认日志路径
 
     # session
     SECRET_KEY = 'die32coajd$#!(dad)'
     PERMANENT_SESSION_LIFETIME = 1800
+
+    # session保存在服务器设置
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.Redis(host='localhost', port=6379, db=0)
 
     REDIS_URL = "redis://:@localhost:6379/0"
     MONGO_URI = "mongodb://user:password@127.0.0.1:27017/{dbname}"
