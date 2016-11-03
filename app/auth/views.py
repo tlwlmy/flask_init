@@ -4,7 +4,7 @@
 # @author tlwlmy
 # @version 2016-09-11
 
-from flask import session
+from flask import session, render_template
 from app.auth import auth
 from app import cache
 from app.auth.auth_db import auth_db
@@ -64,3 +64,8 @@ def insert(params):
 def root():
     t = time.time()
     return str(t)
+
+@auth.route('/admin')
+def admin():
+    # 后台框架页面
+    return render_template('index.html')

@@ -38,22 +38,6 @@ def create_app(config_name=None):
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
 
-    # 微信接口
-    from .wechat import wechat as wechat_blueprint
-    app.register_blueprint(wechat_blueprint, url_prefix='/wechat')
-
-    # 公众号
-    from .application import application as application_blueprint
-    app.register_blueprint(application_blueprint, url_prefix='/app')
-
-    # 用户
-    from .user import user as user_blueprint
-    app.register_blueprint(user_blueprint, url_prefix='/user')
-
-    # 数据
-    from .stat import stat as stat_blueprint
-    app.register_blueprint(stat_blueprint, url_prefix='/stat')
-
     # 授权
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')

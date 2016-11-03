@@ -10,12 +10,8 @@ from decimal import Decimal
 from functools import wraps
 from flask import request, session, redirect, url_for, make_response
 from app.common.config_error import EC_LOGIN_USER_UNAUTH, EC_GET_PARAMS_MISSING
-from app.common.constant import RECEIVE_WELFARE_URL, Duration
+from app.common.constant import Duration
 from app.common.functions import api_response, get_remote_ip
-from .wechat_config_params import wechat_url_params
-from .application_config_params import application_url_params
-from .user_config_params import user_url_params
-from .stat_config_params import stat_url_params
 from .auth_config_params import auth_url_params
 
 def parse_url_params(url_conf, params):
@@ -58,19 +54,7 @@ def parse_url_params(url_conf, params):
 
 def get_params_config(module, func_name, method):
     # 获取url解析配置
-    if module.find('app.wechat.') >= 0:
-        if func_name in wechat_url_params.keys():
-            return wechat_url_params[func_name][method]
-    elif module.find('app.application.') >= 0:
-        if func_name in application_url_params.keys():
-            return application_url_params[func_name][method]
-    elif module.find('app.user.') >= 0:
-        if func_name in user_url_params.keys():
-            return user_url_params[func_name][method]
-    elif module.find('app.stat.') >= 0:
-        if func_name in stat_url_params.keys():
-            return stat_url_params[func_name][method]
-    elif module.find('app.auth.') >= 0:
+    if module.find('app.auth.') >= 0:
         if func_name in auth_url_params.keys():
             return auth_url_params[func_name][method]
     return{}

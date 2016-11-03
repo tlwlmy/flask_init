@@ -126,14 +126,6 @@ EXCHANGE_GIFT_WAY_MOBILE_TRAFFIC = 5    # 流量充值
 
 
 # 用户
-# 关系等级
-USER_STAT_RANK_ONE    = 1    # 徒弟
-USER_STAT_RANK_TWO    = 2    # 徒孙
-USER_STAT_RANK_TRE    = 3    # 曾徒孙
-
-# 用户汇总数据
-USER_BILL_PAY_TYPE_SUMMARY     = 0    # 汇总
-
 USER_DEFAULT_HEAD_IMG_URL = 'http://{0}/static/headimg/headimg.png'    # 微信用户默认头像
 
 # 查询用户关系的信息
@@ -141,41 +133,13 @@ USER_RELATIONSHIP_QUERY_FATHER      = 1    # 查询用户师傅们的信息
 USER_RELATIONSHIP_QUERY_GRANDFATHER = 2    # 查询用户师祖们的信息
 USER_RELATIONSHIP_QUERY_ANCERSTORS  = 3    # 查询用户师公们的信息
 
-# 兑换操作
-USER_EXCHANGE_APPLY_FOR_GIFT = 1    # 申请兑换
-USER_EXCHANGE_CANCEL_GIFT    = 2    # 取消兑换
-
-# 兑换情况
-USER_EXCHANGE_NEVER_APPLY_FOR  = 0    # 用户未申请过兑换
-USER_EXCHANGE_HAVE_APPLIED_FOR = 1    # 用户兑换过
-
-# 新手红包状态
-USER_NOVICE_HONGBAO_NOT_RECEIVE        = 0    # 新手红包未领取
-USER_NOVICE_HONGBAO_RECEIVE_NOT_REMIND = 1    # 新手红包已领取未提示
-USER_NOVICE_HONGBAO_RECEIVE_AND_REMIND = 2    # 新手红包已领取且提示
-
-# 邀请活动
-WECHAT_INVITE_ACTIVITY_END         = 0    # 邀请活动结束标志
-WECHAT_INVITE_ACTIVITY_SOLD_OUT    = 0    # 活动下架
-WECHAT_USER_SUBSCRIBE_APP_COUNT    = 10    # 完成关注公众号个数
-WECHAT_FATHER_INVITE_INTERVAL      = 3     # 邀请徒弟间隔
-WECHAT_FATHER_OBTAIN_WELFARE_LIMIT = 20     # 邀请福利次数
-
 # 微信用户加密密钥
 WECHAT_USER_ENCRYPT_SECRET = 'a0d56f733398f1d7186a3119624f07ba'
-
 
 # 公众号
 # 公众号分成方式
 APP_SHARE_TYPE_REGULAR_PRICE = 0   # 固定价格的分成
 APP_SHARE_TYPE_DYMANIC_RATIO = 1   # 动态的分成比例
-
-APP_BILL_SUMMARY     = 0    # 公众号汇总
-
-APP_WECHAT_JUMP_AID = 3    # 活动中间跳转公众号id
-APP_WECHAT_PAY_AID  = 2    # 微信有支付功能的公众号aid
-APP_WECHAT_RELATE_AIDS = range(11, 31)    # 微信关联公众号列表
-
 
 # 兑换列表状态
 STAT_EXCHANGE_STATUS_WAITING_CHECK = 0    # 等待审核
@@ -190,99 +154,19 @@ APP_WECHAT_TYPE_AUTH_SERVER      = 0    # 认证服务号
 APP_WECHAT_TYPE_UNAUTH_SERVER    = 1    # 未认证服务号
 APP_WECHAT_TYPE_UNAUTH_SUBSCRIBE = 2    # 未认证订阅号
 
-# 公众号应用类型
-APP_WECHAT_APPLY_TYPE_NORMAL = 0    # 正常
-APP_WECHAT_APPLY_TYPE_UNION  = 1    # 联合
-APP_WECHAT_APPLY_TYPE_SIGNIN = 2    # 签到
-
-# 应用类型列表
-APP_WECHAT_APPLY_TYPE_LISTS = [
-    APP_WECHAT_APPLY_TYPE_NORMAL,
-    APP_WECHAT_APPLY_TYPE_UNION,
-    APP_WECHAT_APPLY_TYPE_SIGNIN,
-]
-
-
-# 兑换礼物选项
-APP_TARGETING_GIFT_ENTIRE   = 0    # 选择全部礼物
-APP_TARGETING_GIFT_SPECIFIC = 1    # 特定礼物
 
 PRICE_EXCHANGE_RATE = 1000    # 积分兑换比例 1元等于1000积分
 
-
 # 手机平台
-MOBILE_PLATFORM_IOS    = 1
+MOBILE_PLATFORM_IOS     = 1
 MOBILE_PLATFORM_ANDROID = 2
 
 # 后台登录账号
 BACKGROUND_LOGIN_USER_NAME = 'xiaopao'    # 后台登录用户名
-BACKGROUND_LOGIN_PASSWORD  = 'xp42#$*('   # 后台登录用户密码
-
-# 领取福利安全域名链接
-RECEIVE_WELFARE_SEC_URL = 'http://sec.18city.net/?id=3&mt=2'
-
-# celery队列
-CELERY_BROKER_URL = 'redis://localhost:6379/11'
-
-APP_BACKUP_URL = 'http://www.weixinyunduan.com/gzzh/artview-1.html?wid=323593&rid=365372'    # 公众号备用链接
+BACKGROUND_LOGIN_PASSWORD  = 'jitui123'   # 后台登录用户密码
 
 # 微信用户授权跳转链接
 USER_WECHAT_AUTH_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={redirect_uri}&response_type=code&scope={scope}&state={state}#wechat_redirect'
-
-# 领取福利链接
-RECEIVE_WELFARE_URL = 'http://xpzhuan.duapp.com/app.php'
-
-# 用户邀请图片
-USER_SIGNIN_INVITE_URL = 'http://xpweb.b0.upaiyun.com/pic/invite_s.jpg'
-
-# 静态文件url
-USER_STATIC_URL = 'http://img.coosport.cn/static/'
-
-# 跳转网页
-USER_WECHAT_AUTH_JUMP_WEB_ONE  = 1    # 跳转前端页面一 邦卡
-USER_WECHAT_AUTH_JUMP_WEB_TWO  = 2    # 跳转前端页面二 首页
-USER_WECHAT_AUTH_JUMP_WEB_TRE  = 3    # 跳转前端页面三 赚钱攻略
-USER_WECHAT_AUTH_JUMP_WEB_FOUR = 4    # 跳转前端页面四 兑换页面
-USER_WECHAT_AUTH_JUMP_WEB_FIVE = 5    # 跳转前端页面五 获取验证码
-USER_WECHAT_AUTH_JUMP_WEB_SIX  = 6    # 跳转前端页面六 激活提现
-
-# 跳转外部安全链接
-JUMP_SECURITY_EXTERNAL_URL = 'http://{access_domain}/jp_dm?jt={jump_type}&s={s}'
-
-# 跳转外部安全链接
-WECHAT_JUMP_EXTERNAL_URL = 'http://{access_domain}/wechat/{uid}/jump?jump_type={jump_type}'
-
-# 微信中间跳转链接
-WECHAT_MIDDLE_WEB_URL = 'http://{access_domain}/wechat/jump?jump_type={jump_type}&s={s}'
-
-# 网赚获取付费openid链接
-WECHAT_MZ_PAY_URL = 'http://{access_domain}/app/gp_jump?uid={uid}'
-
-# 用户跳转外部链接
-USER_EXTERNAL_WEB_URL = {
-    '1': 'http://{access_domain}/user/bind',
-    '2': 'http://{access_domain}/user/info',
-    '3': 'http://{access_domain}/user/how',
-    '4': 'http://{access_domain}/user/exchange',
-    '5': 'http://{access_domain}/user/code',
-    '6': 'http://{access_domain}/user/pay',
-}
-
-# 广告平台密钥
-AD_PLATFORM_APP_SECRET = {
-    'wanpu': {
-        'ios': '025333735039097cf5bf845a48a657c9',
-    },
-}
-
-
-# 用户授权跳转链接
-USER_AUTH_URL = {
-    '1': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A//{jump_domain}/wechat/auth_jump%3Fappid%3D{appid}%26jump_type%3D1&response_type=code&scope=snsapi_base&state=123#wechat_redirect',
-    '2': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A//{jump_domain}/wechat/auth_jump%3Fappid%3D{appid}%26jump_type%3D2&response_type=code&scope=snsapi_base&state=123#wechat_redirect',
-    '3': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A//{jump_domain}/wechat/auth_jump%3Fappid%3D{appid}%26jump_type%3D3&response_type=code&scope=snsapi_base&state=123#wechat_redirect',
-    '4': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A//{jump_domain}/wechat/auth_jump%3Fappid%3D{appid}%26jump_type%3D4&response_type=code&scope=snsapi_base&state=123#wechat_redirect',
-}
 
 # 缓存的有效时间
 class Duration:
@@ -301,4 +185,3 @@ class Duration:
     HalfDay   = 43200;
     OneDay    = 86400;
     TenDay    = 864000;
-
