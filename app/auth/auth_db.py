@@ -5,7 +5,7 @@
 # @version 2016-09-11
 
 from app import redis_store
-from app.common.decorator import cached, query_type
+from app.common.decorator import cached
 from app.common.constant import Duration
 from models import User
 
@@ -13,7 +13,6 @@ class AuthDb(object):
     # 授权查询
 
     @cached(timeout=Duration.HalfHour)
-    @query_type(qtype='single_orm_query')
     def query_user_by_name(self, name):
         # 根据用户姓名查询用户信息
 
