@@ -78,6 +78,72 @@ def cached(prefix=None, rtype='list', dict_keys=[], timeout=Duration.HalfHour, f
         return _wrapper_fun
     return wrapper_fun
 
+def single_orm_query(record):
+    # orm查询单行数据
+
+    # 格式化
+    final = record._asdict() if record else {}
+
+    return final
+
+def multi_orm_query(record):
+    # orm查询多行数据
+
+    # 格式化
+    final = [row._asdict() for row in record]
+
+    return final
+
+def single_raw_query(sql):
+    # 原生sql查询单行数据
+
+    # 查询数据库
+    record = db.session.execute(sql)
+
+    # 获取第一条记录
+    row = record.first()
+
+    final  = {key: value for key, value in row.items()}
+
+    return final
+
+def multi_raw_query(sql):
+    # 原生sql查询多行数据
+
+    # 查询数据库
+    record = db.session.execute(sql)
+
+    final = [{key: value for key, value in row.items()} for row in record]
+
+    return final
+
+def query_type(qtype='single_orm_query'):
+    # 查询缓存数据
+    def wrapper_fun(func):
+        @wraps(func)
+        def _wrapper_fun(*args, **kwargs):
+            # 根据查询类型查询
+            if qtype == 'single_orm_query':
+                # orm查询单行数据
+
+                return single_orm_query(func(*args, **kwargs))
+            elif qtype == 'multi_orm_query':
+                # orm查询多行数据
+
+                return multi_orm_query(func(*args, **kwargs))
+            elif qtype == 'single_raw_query':
+                # 原生sql查询单行数据
+
+                return single_raw_query(func(*args, **kwargs))
+            elif qtype == 'multi_raw_query':
+                # 原生sql查询多行数据
+
+                return multi_raw_query(func(*args, **kwargs))
+
+            return func(*args, **kwargs)
+        return _wrapper_fun
+    return wrapper_fun
+
 def allow_cross_domain(fun):
     # 允许跨域
     @wraps(fun)

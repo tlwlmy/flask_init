@@ -10,7 +10,6 @@ from decimal import Decimal
 from functools import wraps
 from flask import request, session, redirect, url_for, make_response
 from app.common.config_error import EC_LOGIN_USER_UNAUTH, EC_GET_PARAMS_MISSING
-from app.common.constant import Duration
 from app.common.functions import api_response, get_remote_ip
 from .auth_config_params import auth_url_params
 
@@ -32,7 +31,7 @@ def parse_url_params(url_conf, params):
             if 'default' in conf.keys():
                 final[alias] = conf['default']
 
-        if alias in final.keys() and final[alias] is not None and conf['need'] == 1:
+        if alias in final.keys() and final[alias] is not None:
             # 检查参数类型
             if conf['type'] == 'i':
                 if isinstance(final[alias], int) or final[alias].isdigit():
@@ -53,6 +52,7 @@ def parse_url_params(url_conf, params):
     return effect, final
 
 def get_params_config(module, func_name, method):
+    # 获取url解析配置
     # 获取url解析配置
     if module.find('app.auth.') >= 0:
         if func_name in auth_url_params.keys():
@@ -97,9 +97,10 @@ def validate_admin_user(func):
     @wraps(func)
     def wrapper_fun(*args, **kwargs):
         # 验证用户信息
+
         name = session.get('name', None)
         if name is None:
-            return api_response({'c':EC_LOGIN_USER_UNAUTH, 'msg': 'Unauthorized'})
+            return redirect(url_for('auth.login'))
 
         # 解析url参数
         effect, params = get_params(func.__module__, func.func_name, request.method)

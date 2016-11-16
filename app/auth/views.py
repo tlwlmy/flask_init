@@ -8,7 +8,7 @@ from flask import session, render_template
 from app.auth import auth
 from app import cache
 from app.auth.auth_db import auth_db
-from app.config_params.functions import validate_admin_user, validate_params
+from app.validate.functions import validate_admin_user, validate_params
 from app.common.functions import api_response, md5
 from app.common.config_error import *
 
@@ -21,22 +21,24 @@ def index():
 def login(params):
     # 用户登录
 
+    # 格式化参数
     params['name'] = params['input']['name']
     params['password'] = params['input']['password']
 
-    user_info = auth_db.query_user_by_name(params['name'], timeout=0)
+    params['user_info'] = auth_db.query_user_by_name(params['name'], timeout=0)
 
     # 检查用户信息
-    if not user_info:
+    if not params['user_info']:
         return api_response({'c': EC_LOGIN_USER_NOT_EXIST, 'msg': 'user_not_exist'})
 
-    if user_info['password'] != md5(params['password']):
+    if params['user_info']['password'] != md5(params['password']):
         return api_response({'c': EC_LOGIN_USER_ACCOUNT_ERROR, 'msg': 'password_error'})
 
     # 写session
-    session['name'] = user_info['name']
+    session['name'] = params['user_info']['name']
 
     return api_response({'c': 0})
+
 
 @auth.route('/insert', methods=['POST'])
 @validate_admin_user
@@ -45,10 +47,11 @@ def insert(params):
 
     # 格式化参数
     params['name'] = params['input']['name']
+    params['password'] = params['input']['password']
 
     # 检查用户信息
-    user_info = auth_db.query_user_by_name(params['name'])
-    if user_info:
+    params['user_info'] = auth_db.query_user_by_name(params['name'])
+    if params['user_info']:
         return api_response({'c': EC_LOGIN_USER_ACCOUNT_ERROR, 'msg': 'user_exist'})
 
     # 格式参数
@@ -58,6 +61,30 @@ def insert(params):
     auth_db.insert_user(params)
 
     return api_response({'c': 0})
+
+
+@auth.route('/update', methods=['POST'])
+@validate_admin_user
+def update(params):
+    # 用户登录
+
+    # 格式化参数
+    params['name'] = params['input']['name']
+    params['password'] = params['input']['password']
+
+    # 检查用户信息
+    params['user_info'] = auth_db.query_user_by_name(params['name'])
+    if not params['user_info']:
+        return api_response({'c': EC_RECORD_NOT_EXIST, 'msg': 'record_not_exist'})
+
+    # 格式参数
+    params['password'] = md5(params['password'])
+
+    # 更新用户信息
+    auth_db.update_user(params['user_info'], {'password': params['password']})
+
+    return api_response({'c': 0})
+
 
 @auth.route('/cache')
 @cache.cached(timeout=5, key_prefix='cached_test')
