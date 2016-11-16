@@ -4,8 +4,9 @@
 # @author tlwlmy
 # @version 2016-09-11
 
-from app import redis_store
 import pickle
+from app import redis_store
+from flask import request, make_response
 from functools import wraps
 from app.common.constant import Duration
 
