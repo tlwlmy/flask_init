@@ -35,7 +35,7 @@ class DevelopmentConfig(Config):
 
     REDIS_URL = "redis://:@localhost:6379/0"
     MONGO_URI = "mongodb://user:password@127.0.0.1:27017/{dbname}"
-    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}:{port}/youmi?charset=utf8',
+    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}?charset=utf8',
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://tlwlmy:pass@127.0.0.1:3306/test?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     FLASK_CACHE_CONFIG = {
@@ -67,6 +67,7 @@ class ProductionConfig(Config):
 
     REDIS_URL = "redis://:@localhost:6379/0"
     MONGO_URI = "mongodb://user:password@127.0.0.1:27017/{dbname}"
+    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}?charset=utf8',
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://tlwlmy:pass@127.0.0.1:3306/test?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     FLASK_CACHE_CONFIG = {

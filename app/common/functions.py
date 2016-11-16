@@ -149,3 +149,17 @@ def get_remote_ip():
     elif 'X-Forwarded-For' in request.headers.keys():
         return request.headers.getlist('X-Forwarded-For')[0]
     return request.remote_addr
+
+def filter_fields(white_fields, modify_info):
+    # 过滤参数
+
+    final = {field: modify_info[field] for field in white_fields if field in modify_info.keys()}
+
+    return final
+
+def compare_fields(white_fields, record, modify_info):
+    # 比较参数
+
+    final = {field: modify_info[field] for field in white_fields if field in modify_info.keys() and modify_info[field] != record[field]}
+
+    return final
