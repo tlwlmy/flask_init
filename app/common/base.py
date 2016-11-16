@@ -18,7 +18,7 @@ class Base(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
+    def commit(self):
         # 执行数据库更新
 
         db.session.commit()
