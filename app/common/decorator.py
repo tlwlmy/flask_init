@@ -35,49 +35,6 @@ def format_record(record, rtype, dict_keys):
 
     return record
 
-def generate_cache_key(func_name, prefix, prefix_keys):
-    # 生产缓存key
-    cache_key = prefix if prefix is not None else func_name
-    # cache_key = '{0}:{1}'.format(cache_key, ':'.join(map(str, prefix_keys)))
-    for index in range(len(prefix_keys)):
-        cache_key = '{0}:{1}'.format(cache_key, prefix_keys[index] if prefix_keys[index] is not None else '')
-    return cache_key
-
-def cached(prefix=None, rtype='list', dict_keys=[], timeout=Duration.HalfHour, func_type='class'):
-    # 查询缓存数据
-    def wrapper_fun(func):
-        @wraps(func)
-        def _wrapper_fun(*args, **kwargs):
-            # 生产缓存key
-            start_index = 1 if func_type == 'class' else 0
-            cache_key = generate_cache_key(func.func_name, prefix, args[start_index:])
-
-            # 外部修改缓存时长
-            expire_time = kwargs['timeout'] if 'timeout' in kwargs.keys() else timeout
-
-            # 删除timeout参数
-            if 'timeout' in kwargs.keys():
-                del kwargs['timeout']
-
-            # 查询redis缓存数据
-            final = redis_store.get(cache_key) if expire_time else None
-            if final is None:
-                record = func(*args, **kwargs)
-                final = format_record(record, rtype, dict_keys)
-
-
-                # 序列化参数，写缓存，设置缓存有效时间
-                final = pickle.dumps(final)
-                if expire_time:
-                    redis_store.set(cache_key, final, expire_time)
-
-            # 格式化参数
-            final = pickle.loads(final)
-
-            return final
-        return _wrapper_fun
-    return wrapper_fun
-
 def single_orm_query(record):
     # orm查询单行数据
 
@@ -117,30 +74,74 @@ def multi_raw_query(sql):
 
     return final
 
+def format_query_record(record, qtype):
+    # 格式化查询参数
+
+    if qtype == 'single_orm_query':
+        # orm查询单行数据
+        record = single_orm_query(record)
+    elif qtype == 'multi_orm_query':
+        # orm查询多行数据
+        record = multi_orm_query(record)
+    elif qtype == 'single_raw_query':
+        # 原生sql查询单行数据
+        record = single_raw_query(record)
+    elif qtype == 'multi_raw_query':
+        # 原生sql查询多行数据
+        record = multi_raw_query(record)
+
+    return record
+
 def query_type(qtype='single_orm_query'):
     # 查询缓存数据
     def wrapper_fun(func):
         @wraps(func)
         def _wrapper_fun(*args, **kwargs):
             # 根据查询类型查询
-            if qtype == 'single_orm_query':
-                # orm查询单行数据
+            return format_query_record(func(*args, **kwargs), qtype)
+        return _wrapper_fun
+    return wrapper_fun
 
-                return single_orm_query(func(*args, **kwargs))
-            elif qtype == 'multi_orm_query':
-                # orm查询多行数据
+def generate_cache_key(func_name, prefix, prefix_keys):
+    # 生产缓存key
+    cache_key = prefix if prefix is not None else func_name
+    # cache_key = '{0}:{1}'.format(cache_key, ':'.join(map(str, prefix_keys)))
+    for index in range(len(prefix_keys)):
+        cache_key = '{0}:{1}'.format(cache_key, prefix_keys[index] if prefix_keys[index] is not None else '')
+    return cache_key
 
-                return multi_orm_query(func(*args, **kwargs))
-            elif qtype == 'single_raw_query':
-                # 原生sql查询单行数据
+def cached(prefix=None, rtype='list', dict_keys=[], timeout=Duration.HalfHour, func_type='class', qtype='single_orm_query'):
+    # 查询缓存数据
+    def wrapper_fun(func):
+        @wraps(func)
+        def _wrapper_fun(*args, **kwargs):
+            # 生产缓存key
+            start_index = 1 if func_type == 'class' else 0
+            cache_key = generate_cache_key(func.func_name, prefix, args[start_index:])
 
-                return single_raw_query(func(*args, **kwargs))
-            elif qtype == 'multi_raw_query':
-                # 原生sql查询多行数据
+            # 外部修改缓存时长
+            expire_time = kwargs['timeout'] if 'timeout' in kwargs.keys() else timeout
 
-                return multi_raw_query(func(*args, **kwargs))
+            # 删除timeout参数
+            if 'timeout' in kwargs.keys():
+                del kwargs['timeout']
 
-            return func(*args, **kwargs)
+            # 查询redis缓存数据
+            final = redis_store.get(cache_key) if expire_time else None
+            if final is None:
+                # 查询数据库，格式数据库数据
+                record = format_query_record(func(*args, **kwargs), qtype)
+                final = format_record(record, rtype, dict_keys)
+
+                # 序列化参数，写缓存，设置缓存有效时间
+                final = pickle.dumps(final)
+                if expire_time:
+                    redis_store.set(cache_key, final, expire_time)
+
+            # 格式化参数
+            final = pickle.loads(final)
+
+            return final
         return _wrapper_fun
     return wrapper_fun
 
