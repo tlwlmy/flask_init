@@ -37,4 +37,4 @@ class User(Base):
         # 更新
         affected_row = User.query.filter(User.uid==record['uid']).update(modify_info)
 
-        return affected_row
+        return affected_row, modify_info
