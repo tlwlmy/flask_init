@@ -58,7 +58,7 @@ def single_raw_query(sql):
     record = db.session.execute(sql)
 
     # 获取第一条记录
-    row = record.first()
+    row = record.first() if record.rowcount else {}
 
     final  = {key: value for key, value in row.items()}
 
