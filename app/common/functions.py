@@ -5,11 +5,12 @@
 # @version 2016-09-11
 
 
-import json, random, string, hashlib
+import json, random, string, hashlib, urlparse
 from decimal import Decimal
 from flask import jsonify, make_response, request
 from datetime import date, datetime
 from functools import wraps
+from app.common.constant import PRICE_EXCHANGE_RATE, CM_STATIC_URL
 
 def api_response(contents, code=200):
     """返回API的响应
@@ -163,3 +164,31 @@ def compare_fields(white_fields, record, modify_info):
     final = {field: modify_info[field] for field in white_fields if field in modify_info.keys() and modify_info[field] != record[field]}
 
     return final
+
+def cover_point_to_price(point):
+    # 积分兑换为钱
+
+    return 1.0 * point / PRICE_EXCHANGE_RATE
+
+def cover_price_to_point(price):
+    # 钱兑换为积分
+
+    return int(price * PRICE_EXCHANGE_RATE)
+
+def format_static_url(url):
+    # 格式化静态文件url
+
+    url_split = urlparse.urlparse(url)
+
+    # 路径
+    path = url_split.path[8:] if url_split.path.find('/static/') == 0 else url_split.path
+
+    # 静态文件名
+    filename = '{0}{1}'.format(path, '' if url_split.query == '' else '?{0}'.format(url_split.query))
+
+    return filename
+
+def get_static_url(filename):
+    # 获取静态文件url
+
+    return CM_STATIC_URL + filename
