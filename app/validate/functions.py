@@ -85,7 +85,7 @@ def format_init_params(func):
         # 获取请求基本信息
         params['ip'] = get_remote_ip()
         params['ipr'] = request.remote_addr
-        params['ua'] = urllib.quote(request.headers['User-Agent']),
+        params['ua'] = urllib.quote(request.headers['User-Agent'])
 
         kwargs['params'] = params
 
