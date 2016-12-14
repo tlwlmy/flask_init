@@ -175,8 +175,8 @@ def cover_price_to_point(price):
 
     return int(price * PRICE_EXCHANGE_RATE)
 
-def format_static_url(url):
-    # 格式化静态文件url
+def filter_static_url(url):
+    # 处理静态文件url
 
     url_split = urlparse.urlparse(url)
 
@@ -188,7 +188,7 @@ def format_static_url(url):
 
     return filename
 
-def get_static_url(filename):
-    # 获取静态文件url
+def format_static_url(filename):
+    # 格式化静态文件url
 
     return CM_STATIC_URL + filename
