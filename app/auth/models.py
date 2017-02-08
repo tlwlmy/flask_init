@@ -6,7 +6,7 @@
 
 from app import db
 from datetime import datetime
-from app.common.base import Base, insert_filter, update_filter
+from app.common.base import Base, insert_filter, insert_multi_filter, update_filter, update_multi_filter
 
 class User(Base):
     # __bind_key__ = 'wechat'   # 数据库路由
@@ -32,9 +32,29 @@ class User(Base):
         return record
 
     @staticmethod
+    @insert_multi_filter(_insert_fields)
+    def insert_multi(modify_info):
+        # 批量插入
+
+        record = [User(**row) for row in modify_info]
+
+        return record
+
+    @staticmethod
     @update_filter(_update_fields)
     def update(record, modify_info):
         # 更新
         affected_row = User.query.filter(User.uid==record['uid']).update(modify_info)
 
         return affected_row, modify_info
+
+    @staticmethod
+    @update_multi_filter(_update_fields)
+    def update_multi(record, modify_info):
+        # 批量更新
+        affected_rows = []
+        for key in modify_info.keys():
+            if modify_info[key] and key in record.keys():
+                affected_rows.append(User.query.filter(User.uid==record[key]['uid']).update(modify_info[key]))
+
+        return affected_rows, modify_info
