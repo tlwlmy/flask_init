@@ -9,7 +9,7 @@ from app.auth import auth
 from app import cache
 from app.auth.auth_db import auth_db
 from app.validate.functions import validate_admin_user, validate_params
-from app.common.functions import api_response, md5
+from app.common.functions import api_response, md5, generate_str
 from app.common.config_error import *
 
 @auth.route('/index', methods=['GET', 'POST'])
@@ -39,7 +39,6 @@ def login(params):
 
     return api_response({'c': 0})
 
-
 @auth.route('/insert', methods=['POST'])
 @validate_admin_user
 def insert(params):
@@ -61,7 +60,6 @@ def insert(params):
     auth_db.insert_user(params)
 
     return api_response({'c': 0})
-
 
 @auth.route('/update', methods=['POST'])
 @validate_admin_user
@@ -85,7 +83,6 @@ def update(params):
 
     return api_response({'c': 0})
 
-
 @auth.route('/cache')
 @cache.cached(timeout=5, key_prefix='cached_test')
 def root():
@@ -96,3 +93,32 @@ def root():
 def admin():
     # 后台框架页面
     return render_template('index.html')
+
+@auth.route('/mulit_deal')
+def mulit_deal():
+    # 批量处理
+    record = [
+        {'uid': 10, 'name': 4, 'b': 0, 'password': 4},
+        {'uid': 11, 'name': 5, 'b': 0, 'password': 5},
+        {'uid': 9, 'name': 3, 'b': 0, 'password': 4},
+        {'uid': 8, 'name': 2, 'b': 0, 'password': 5},
+    ]
+
+    modify_info = [
+        {'name': 4, 'b': 0, 'password': 10},
+        {'name': 5, 'b': 0, 'password': 11},
+    ]
+    from app.common.functions import compare_lists
+
+    record_lists, update_lists, insert_lists, delete_lists = compare_lists(record, modify_info, ['name'])
+
+    # 批量更新
+    auth_db.update_multi_user(record_lists, update_lists)
+
+    # 批量插入
+    auth_db.insert_multi_user(insert_lists)
+
+    # 批量删除
+    auth_db.delete_mutli_user(delete_lists)
+
+    return api_response({'c': 0})

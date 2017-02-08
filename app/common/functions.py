@@ -64,17 +64,21 @@ def parse_url_params(url_conf, params):
 
     return effect, final
 
-def generate_str(final):
+def generate_str(final, dict_keys=[], symbol='&'):
     # 字典按照'&'分割转字符串
+
+    if not dict_keys:
+        dict_keys = final.keys()
+
+    combine_str = symbol.join(["{0}={1}".format(key, final[key]) for key in dict_keys if key in final.keys()])
+    """
     combine_str = ''
     for key, value in final.items():
-        if type(value) == int:
-            combine_str += "%s=%d&" % (key, value)
-        else:
-            combine_str += "%s=%s&" % (key, value)
+        combine_str += "{0}={1}&".format(key, value)
 
     if final.keys():
         combine_str = combine_str[0:-1]
+    """
 
     return combine_str
 
@@ -192,3 +196,67 @@ def format_static_url(filename):
     # 格式化静态文件url
 
     return CM_STATIC_URL + filename
+
+def save_stream_img(filename, icon):
+    # 保存图片
+
+    # 文件位置
+    target = os.path.join(CM_SATIC_PATH, filename)
+
+    # 检查目录存不存在,如果不存在新建一个
+    if not os.path.exists(os.path.dirname(target)):
+        os.makedirs(os.path.dirname(target))
+
+    with open(target,'wb') as up:
+        up.write(icon)
+
+def get_random_record(options, key_name=None, value_name=None):
+    # 获取随机记录
+
+    key_name = key_name if key_name is not None else 'weight'
+
+    # 检查是否有元素
+    if not options:
+        return {} if value_name is None else None
+
+    # 计算权重
+    total_weight = 0
+    for row in options:
+        total_weight += row[key_name]
+
+    # 随机值
+    rate = random.randint(0, total_weight - 1)
+
+    # 获取随机项
+    final = {}
+    for row in options:
+        if rate < row[key_name]:
+            final = row
+            break
+        rate -= row[key_name]
+
+    return final if value_name is None else final[value_name]
+
+def list_cover_key_dict(record, dict_keys=[]):
+    # 列表转成带组合key的dict
+
+    if not dict_keys:
+        return {}
+
+    # 格式化
+    final = {generate_str(item, dict_keys): item for item in record}
+
+    return final
+
+def compare_lists(record, modify_info, dict_keys=[]):
+    # list数据对比
+
+    record = list_cover_key_dict(record, dict_keys)
+    modify_info = list_cover_key_dict(modify_info, dict_keys)
+
+    record_lists = {key: record[key] for key in record.keys() if key in modify_info.keys()}
+    update_lists = {key: modify_info[key] for key in modify_info.keys() if key in record.keys()}
+    insert_lists = [modify_info[key] for key in modify_info.keys() if key not in record.keys()]
+    delete_lists = [record[key] for key in record.keys() if key not in modify_info.keys()]
+
+    return record_lists, update_lists, insert_lists, delete_lists
